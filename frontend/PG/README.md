@@ -86,6 +86,9 @@ src/
 ├─ pages/
 │ ├─ HomePage/
 │ │ ├─ HomePage.jsx
+│ │ ├─ HomePage.css
+│ │
+│ ├─ components/
 │ │ ├─ Title.jsx
 │ │ ├─ Marker.jsx
 │ │ └─ Tutorial.jsx
