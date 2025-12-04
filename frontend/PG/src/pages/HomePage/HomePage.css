@@ -1,0 +1,104 @@
+/* 전체 화면 배경 */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #111;        /* 로딩 시 배경 */
+}
+
+/* 마커 공통 */
+.marker {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 20;
+}
+
+.marker:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.9);
+}
+
+/* 초록 / 빨강 */
+.marker-green {
+  background-color: #4ade80;
+}
+
+.marker-red {
+  background-color: #f97373;
+}
+
+.marker-icon {
+  font-size: 20px;
+  color: #004;
+}
+
+/* 안쪽 카드 (라운드 + 테두리) */
+.hero-inner {
+  position: relative;
+  width: 100%;
+  max-width: 1024px;
+  aspect-ratio: 16 / 9;         /* 이미지 비율 비슷하게 */
+  border-radius: 36px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background-image: url("/main.jpg"); /* public 폴더 기준 경로 */
+  background-size: cover;
+  background-position: center;
+}
+
+/* 위쪽 투명 헤더 영역 */
+.hero-top {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+/* 아이콘 버튼 */
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.45);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* 가운데 텍스트/버튼 */
+.hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 40px;
+}
+
+.hero-text h1 {
+  color: #fff;
+  font-size: 40px;
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+/* Start 버튼 */
+.start-btn {
+  padding: 14px 40px;
+  font-size: 20px;
+  border-radius: 999px;
+  border: 2px solid white;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  cursor: pointer;
+}
