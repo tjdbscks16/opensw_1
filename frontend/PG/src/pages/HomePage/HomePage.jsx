@@ -1,4 +1,5 @@
 import React from 'react'
+<<<<<<< HEAD
 import Marker from "./components/Marker.jsx";
 import Title from "./components/Title.jsx";
 import Tutorial from "./components/Tutorial.jsx";
@@ -32,5 +33,11 @@ export default function HomePage() {
         </main>
       </div>
     </div>
+=======
+
+export default function HomePage() {
+  return (
+    <div>HomePage</div>
+>>>>>>> d4540fa34240e7eb968b67b509a392f42b174b36
   )
 }
