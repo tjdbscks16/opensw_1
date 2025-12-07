@@ -52,8 +52,11 @@ export default function HomePage() {
 
         {/* 콘텐츠 영역 */}
         <main className="absolute inset-0 flex items-end p-10">
-          <div>
+          <div className="max-w-xl">
+          <div className="bg-gradient-to-t from-black/80 via-black/60 to-transparent
+                    backdrop-blur-md rounded-2xl px-6 py-4">
             <Title />
+          </div>
           </div>
         </main>
       </div>

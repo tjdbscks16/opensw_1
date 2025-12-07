@@ -1,11 +1,9 @@
 export default function Title() {
   return (
-    <div>
-      <h1 className="text-white text-5xl leading-tight mb-6 font-bold">
-        Hallym University
-        <br />
-        Smart Parking system
-      </h1>
-    </div>
+    <h1 className="text-white text-6xl md:text-7xl leading-tight mb-2 font-extrabold drop-shadow-lg">
+      Hallym University
+      <br />
+      Smart Parking system
+    </h1>
   );
 }
