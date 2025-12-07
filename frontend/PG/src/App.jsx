@@ -13,5 +13,9 @@ export default function App() {
       </Routes>
     </Router>
     </div>
+
+export default function App() {
+  return (
+    <div>App</div>
   )
 }
