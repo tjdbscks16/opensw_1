@@ -1,5 +1,4 @@
 import React from 'react'
-import "./HomePage.css";
 import Marker from "./components/Marker.jsx";
 import Title from "./components/Title.jsx";
 import Tutorial from "./components/Tutorial.jsx";
@@ -27,9 +26,5 @@ export default function HomePage() {
         </main>
       </div>
     </div>
-
-export default function HomePage() {
-  return (
-    <div>HomePage</div>
   )
 }
