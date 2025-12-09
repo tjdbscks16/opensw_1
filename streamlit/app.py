@@ -130,7 +130,7 @@ with row2_2:
     with c1:
         with st.container(border=True):
             st.markdown("### 🚕 '잠깐 들르는' 학교")
-            st.markdown("차량 보통 주차 시간 **9분**, 30분 내 출차 비율 **55.7%**! 주차보다는 **회차(택시/픽업/배달)** 수요가 압도적입니다.")
+            st.markdown(" 30분 내 출차 비율 **55.7%**! 주차보다는 **회차(택시/픽업/배달)** 수요가 압도적입니다.")
     with c2:
         with st.container(border=True):
             st.markdown("### 📉 금요일의 트래픽")
