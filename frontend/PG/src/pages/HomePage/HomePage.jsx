@@ -198,7 +198,7 @@ export default function HomePage() {
           label="일송 주차장"
           onClick={() => handleMarkerClick("Ilsong")}
         />
-        <Marker type="red" top="60%" left="25%" label="도헌 주차장" />
+        <Marker type="red" top="55%" left="25%" label="도헌 주차장" />
         <Marker type="red" top="55%" left="90%" label="CLC 주차장" />
 
         {/* 🔹 왼쪽 텍스트 영역 – 자동차 랜딩 페이지처럼 분리감 주기 */}
