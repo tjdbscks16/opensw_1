@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hallym Parking Density Test</title>
+</head>
+<body>
+  <h1>테스트 페이지</h1>
+  <p>API 연결 테스트 페이지입니다.</p>
+
+  <button onclick="loadData()">밀집도 불러오기</button>
+
+  <pre id="result"></pre>
+
+  <script>
+    async function loadData() {
+      const res = await fetch("/api/density/average");
+      const data = await res.json();
+      document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
