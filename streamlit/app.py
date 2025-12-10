@@ -171,11 +171,21 @@ df_hourly = pd.DataFrame(hourly_avg_data)
 df_week = pd.DataFrame(weekday_avg_data)
 df_gate = pd.DataFrame(gate_share_data)
 
+# 세션 상태 초기화
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# 기존 대화 출력
-for role, message in st.session_state.chat_history:
+MAX_HISTORY = 8  # 화면에 보여줄 최대 메시지 개수 (user+assistant 합쳐서)
+
+# 상단에 "대화 초기화" 버튼
+reset_col, _ = st.columns([1, 5])
+with reset_col:
+    if st.button("🧹 대화 초기화", use_container_width=True):
+        st.session_state.chat_history = []
+        st.experimental_rerun()  # streamlit 1.x 사용 시 / 1.40 이후면 st.rerun()
+
+# 기존 대화 출력 (최근 MAX_HISTORY개만)
+for role, message in st.session_state.chat_history[-MAX_HISTORY:]:
     with st.chat_message(role):
         st.markdown(message)
 
@@ -184,20 +194,21 @@ user_input = st.chat_input("한림대 주차 패턴에 대해 궁금한 점을 �
 def answer_question(q: str) -> str:
     q_lower = q.lower()
 
-    # 1) 피크 시간 관련
-    if "언제" in q and ("막혀" in q or "붐비" in q or "피크" in q):
+    # 1) 피크 시간 관련 (막히다/붐비다/피크/혼잡/출근)
+    if ("언제" in q or "시간" in q) and any(
+        kw in q for kw in ["막혀", "붐비", "혼잡", "피크", "출근"]
+    ):
         peak_hour = kpi_data["peak_hour"]
-        # 해당 시간 전후 트래픽
         around = df_hourly[df_hourly["Hour"].between(peak_hour-1, peak_hour+1)]
         max_val = int(around["Avg_Count"].max())
         return (
             f"가장 막히는 시간은 **{peak_hour}시**입니다.\n\n"
-            f"- {peak_hour-1}~{peak_hour+1}시 사이에는 시간당 최대 **{max_val}대**까지 유입되며,\n"
-            f"  등교 시간(08시 전후)에 정문 주변 혼잡이 가장 심합니다."
+            f"- {peak_hour-1}시~{peak_hour+1}시 사이에는 시간당 최대 **{max_val}대**까지 유입되며,\n"
+            f"  특히 **등교 시간(08시 전후)**에 정문 주변 혼잡이 가장 심합니다."
         )
 
-    # 2) 요일별 비교 (평일 vs 금요일 vs 주말)
-    if "요일" in q or "평일" in q or "주말" in q or "금요일" in q:
+    # 2) 요일별 비교 (평일 vs 금요일 vs 주말 + '언제가 덜 막혀요?' 같은 질문)
+    if any(kw in q for kw in ["요일", "평일", "주말", "금요일", "한가", "여유"]):
         weekday_mean = df_week[df_week["Type"] == "Weekday"]["Avg_Count"].mean()
         friday = int(df_week[df_week["Day"] == "Friday"]["Avg_Count"].iloc[0])
         weekend_mean = df_week[df_week["Type"] == "Weekend"]["Avg_Count"].mean()
@@ -208,11 +219,11 @@ def answer_question(q: str) -> str:
             f"- **월~목 평균**: 약 **{int(weekday_mean):,}대**\n"
             f"- **금요일**: 약 **{friday:,}대** (평일 평균 대비 **-{diff_fri:,}대** 감소)\n"
             f"- **주말(토·일)**: 평균 **{int(weekend_mean):,}대**로, 평일의 약 1/3 수준입니다.\n\n"
-            f"따라서 혼잡을 피하고 싶다면 **금요일이나 주말**이 상대적으로 여유로운 편입니다."
+            f"그래서 혼잡을 피하고 싶다면 **금요일이나 주말**이 상대적으로 여유로운 편입니다."
         )
 
     # 3) 게이트별 쏠림 관련
-    if "정문" in q or "게이트" in q or "동문" in q or "서문" in q:
+    if any(kw in q for kw in ["정문", "게이트", "동문", "서문", "입구", "출입구"]):
         main_share = df_gate[df_gate["Gate"].str.contains("정문")]["Share"].sum()
         east = df_gate[df_gate["Gate"] == "동문"]["Share"].iloc[0]
         west = df_gate[df_gate["Gate"] == "서문"]["Share"].iloc[0]
@@ -228,7 +239,7 @@ def answer_question(q: str) -> str:
 
     # 4) 기본 답변
     return (
-        "아직 그 질문은 자동 분석에 연결되어 있지 않아요 😅\n"
+        "아직 그 질문은 자동 분석에 직접 연결되어 있지 않아요 😅\n\n"
         "예를 들어 다음과 같이 물어볼 수 있어요:\n"
         "- 언제 주차장이 가장 붐비나요?\n"
         "- 평일이랑 주말 중에 언제가 더 한가해요?\n"
