@@ -258,12 +258,19 @@ if user_input:
     }
 
     # LLM 호출
-    with st.chat_message("assistant"):
-        with st.spinner("로컬 LLM으로 답변 생성 중..."):
+  with st.chat_message("assistant"):
+    with st.spinner("LLM으로 답변 생성 중..."):
+        try:
             msgs = chat_prompt.format_messages(**chain_input)
             res = chat_llm.invoke(msgs)
             reply = res.content
             st.markdown(reply)
+        except Exception as e:
+            # LLM 호출 실패 시 사용자에게 안내
+            st.error("⚠️ LLM 서버와 통신 중 오류가 발생했어요. (Ollama / ngrok 상태를 확인해 주세요)")
+            # 디버깅용으로 에러 문자열은 최소한만 노출
+            st.code(str(e))
+            reply = "지금은 주차 챗봇 서버에 연결할 수 없어요. 잠시 후 다시 시도해 주세요."
 
     st.session_state.chat_history.append(("assistant", reply))
 # ------------------------------------------------------------------
