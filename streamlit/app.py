@@ -239,7 +239,7 @@ gate_summary = "\n".join(
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-MAX_HISTORY = 5  # 최근 8개 메시지만 보여주기
+MAX_HISTORY = 5  # 최근 5개 메시지만 보여주기
 
 # 기존 대화 출력
 for role, message in st.session_state.chat_history[-MAX_HISTORY:]:
@@ -267,20 +267,25 @@ if user_input:
         "question": user_input,
     }
 
-    # LLM 호출
-  with st.chat_message("assistant"):
-    with st.spinner("LLM으로 답변 생성 중..."):
-        try:
-            msgs = chat_prompt.format_messages(**chain_input)
-            res = chat_llm.invoke(msgs)
-            reply = res.content
-            st.markdown(reply)
-        except Exception as e:
-            # LLM 호출 실패 시 사용자에게 안내
-            st.error("⚠️ LLM 서버와 통신 중 오류가 발생했어요. (Ollama / ngrok 상태를 확인해 주세요)")
-            # 디버깅용으로 에러 문자열은 최소한만 노출
-            st.code(str(e))
-            reply = "지금은 주차 챗봇 서버에 연결할 수 없어요. 잠시 후 다시 시도해 주세요."
+    # LLM 사용 가능한 경우에만 호출
+    if use_llm and chat_llm is not None:
+        with st.chat_message("assistant"):
+            with st.spinner("LLM으로 답변 생성 중..."):
+                try:
+                    msgs = chat_prompt.format_messages(**chain_input)
+                    res = chat_llm.invoke(msgs)
+                    reply = res.content
+                except Exception as e:
+                    st.error("⚠️ LLM 서버와 통신 중 오류가 발생했어요. (Ollama / ngrok 상태를 확인해 주세요)")
+                    st.code(str(e))
+                    reply = "지금은 주차 챗봇 서버에 연결할 수 없어요. 잠시 후 다시 시도해 주세요."
+                st.markdown(reply)
 
-    st.session_state.chat_history.append(("assistant", reply))
-# ------------------------------------------------------------------
+        st.session_state.chat_history.append(("assistant", reply))
+    else:
+        # LLM이 비활성화된 경우
+        with st.chat_message("assistant"):
+            reply = "현재 LLM 서버에 연결할 수 없어 Q&A 챗봇 기능이 비활성화된 상태입니다."
+            st.markdown(reply)
+        st.session_state.chat_history.append(("assistant", reply))
+
