@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+from langchain_community.chat_models import ChatOllama
+from langchain_core.prompts import ChatPromptTemplate
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -37,11 +39,15 @@ gate_share_data = {
     'Share': [46.9, 23.3, 10.9, 6.0, 6.0, 6.9]
 }
 
+# 공통 DataFrame (챗봇 + 차트에서 같이 사용)
+df_hourly = pd.DataFrame(hourly_avg_data)
+df_week = pd.DataFrame(weekday_avg_data)
+df_gate = pd.DataFrame(gate_share_data)
+
 # -----------------------------------------------------------------------------
 # [STREAMLIT APP LAYOUT]
 # -----------------------------------------------------------------------------
 
-# 페이지 기본 설정
 st.set_page_config(
     page_title="한림대 주차 분석", 
     layout="wide"
@@ -52,8 +58,99 @@ st.title("🏫 한림대학교 주차 이용 패턴 및 통합 분석")
 st.markdown("**분석 기준:** 2025년 9월~10월 전체 데이터 통합 (총 61일) | **목표:** '학교 입출차 현황 패턴' 도출")
 st.info("💡실제 입출차 현황 데이터를 바탕으로 2025년 9월 1일 ~ 10월 31일 (총 61일) 간의 입출차 로그를 분석한 결과를 시각화합니다.")
 
-# --- SECTION 1: KEY METRICS ---
-st.header("1. 핵심 운영 지표 (Key Metrics)")
+# -----------------------------------------------------------------------------
+# LLM 설정 (Ollama + Llama3.1)
+# -----------------------------------------------------------------------------
+chat_llm = ChatOllama(model="llama3.1")  # ollama serve가 백그라운드에서 돌아가 있어야 함
+
+chat_prompt = ChatPromptTemplate.from_template("""
+너는 한림대학교 주차 데이터 분석을 도와주는 어시스턴트야.
+
+[사용 가능한 데이터 요약]
+- 일 평균 입차량: {avg_daily_traffic}대
+- 분석 기간: {total_days}일 (2025-09-01 ~ 10-31)
+- 평균 체류 시간: {avg_duration}분
+- 중위 체류 시간: {median_duration}분
+- 30분 이내 출차 비율: {short_term_ratio}%
+- 피크 시간: {peak_hour}시
+
+요일별 평균 입차량:
+{weekday_summary}
+
+게이트별 유입 비중:
+{gate_summary}
+
+위 데이터만 기준으로, 사용자의 질문에 한국어로 친절하게 답변해 줘.
+숫자를 말할 땐 **굵게** 표시해 줘.
+데이터에 없는 정보는 아는 척 하지 말고, 모른다고 말해.
+질문: {question}
+""")
+
+# 요약 텍스트 만들기 (챗봇 prompt용)
+weekday_summary = "\n".join(
+    f"- {row.Day}: {row.Avg_Count}대 ({row.Type})"
+    for row in df_week.itertuples()
+)
+
+gate_summary = "\n".join(
+    f"- {row.Gate}: {row.Share}%"
+    for row in df_gate.itertuples()
+)
+
+# -----------------------------------------------------------------------------
+# 1. LLM 기반 Q&A 챗봇 섹션 (맨 위로 이동)
+# -----------------------------------------------------------------------------
+st.header("💬 주차 데이터 Q&A 챗봇 (로컬 LLM)")
+
+st.caption("한림대 주차 패턴, 혼잡 시간대, 게이트별 쏠림 등에 대해 자연어로 질문해 보세요.")
+
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+MAX_HISTORY = 5  # 최근 5개 메시지만 보여주기
+
+# 기존 대화 출력
+for role, message in st.session_state.chat_history[-MAX_HISTORY:]:
+    with st.chat_message(role):
+        st.markdown(message)
+
+user_input = st.chat_input("한림대 주차 패턴에 대해 뭐든 물어보세요!")
+
+if user_input:
+    # 유저 발화 저장 + 출력
+    st.session_state.chat_history.append(("user", user_input))
+    with st.chat_message("user"):
+        st.markdown(user_input)
+
+    # LLM 체인 입력값 만들기
+    chain_input = {
+        "avg_daily_traffic": kpi_data["avg_daily_traffic"],
+        "total_days": kpi_data["total_days"],
+        "avg_duration": kpi_data["avg_duration"],
+        "median_duration": kpi_data["median_duration"],
+        "short_term_ratio": kpi_data["short_term_ratio"],
+        "peak_hour": kpi_data["peak_hour"],
+        "weekday_summary": weekday_summary,
+        "gate_summary": gate_summary,
+        "question": user_input,
+    }
+
+    # LLM 호출
+    with st.chat_message("assistant"):
+        with st.spinner("로컬 LLM으로 답변 생성 중..."):
+            msgs = chat_prompt.format_messages(**chain_input)
+            res = chat_llm.invoke(msgs)
+            reply = res.content
+            st.markdown(reply)
+
+    st.session_state.chat_history.append(("assistant", reply))
+
+st.divider()
+
+# -----------------------------------------------------------------------------
+# 2. 핵심 지표 (Key Metrics)
+# -----------------------------------------------------------------------------
+st.header("📊 1. 핵심 운영 지표 (Key Metrics)")
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
@@ -67,17 +164,18 @@ with col4:
 
 st.divider()
 
-# --- SECTION 2: CHARTS & INSIGHTS ---
+# -----------------------------------------------------------------------------
+# 3. CHARTS & INSIGHTS
+# -----------------------------------------------------------------------------
 row1_1, row1_2 = st.columns([1, 1])
 
 # Chart 1: Hourly Pattern
 with row1_1:
     st.subheader("⏰ 시간대별 평균 트래픽 패턴")
-    df_hourly = pd.DataFrame(hourly_avg_data)
     
     # Highlight Peak Hour
     colors = ['#e0e0e0'] * 24
-    colors[8] = '#ff4b4b' # Red for Peak
+    colors[8] = '#ff4b4b'  # Red for Peak
     colors[12] = '#ffa15a' # Orange for Lunch
     
     fig_hourly = go.Figure(data=[go.Bar(
@@ -97,7 +195,6 @@ with row1_1:
 # Chart 2: Weekday Pattern
 with row1_2:
     st.subheader("📅 요일별 평균 이용량 (금요일 감소)")
-    df_week = pd.DataFrame(weekday_avg_data)
     
     fig_week = px.bar(df_week, x='Day', y='Avg_Count', color='Type',
                       color_discrete_map={'Weekday': '#2b83ba', 'Weekend': '#abdda4'},
@@ -111,7 +208,6 @@ row2_1, row2_2 = st.columns([1, 1])
 # Chart 3: Gate Share
 with row2_1:
     st.subheader("🚧 게이트별 점유율 (쏠림 현상)")
-    df_gate = pd.DataFrame(gate_share_data)
     
     fig_gate = px.pie(df_gate, values='Share', names='Gate', hole=0.4,
                       title="게이트별 차량 유입 비중")
@@ -120,8 +216,6 @@ with row2_1:
     st.info("💡 정문(우/좌)으로 전체 차량의 70%가 진입합니다. 동문/서문의 활용도가 낮습니다.")
 
 # Insights Text
-# 기존 코드의 with row2_2: 부분을 아래 코드로 교체하세요.
-
 with row2_2:
     st.subheader("📊 데이터 기반 핵심 인사이트 TOP 6")
     
@@ -130,7 +224,7 @@ with row2_2:
     with c1:
         with st.container(border=True):
             st.markdown("### 🚕 '잠깐 들르는' 학교")
-            st.markdown(" 30분 내 출차 비율 **55.7%**! 주차보다는 **회차(택시/픽업/배달)** 수요가 압도적입니다.")
+            st.markdown("30분 내 출차 비율 **55.7%**! 주차보다는 **회차(택시/픽업/배달)** 수요가 압도적입니다.")
     with c2:
         with st.container(border=True):
             st.markdown("### 📉 금요일의 트래픽")
@@ -160,90 +254,3 @@ with row2_2:
 
 # Footer
 st.markdown("---")
-#st.caption("본 대시보드는 2025년 9월 1일부터 10월 31일까지의 입출차 로그 데이터를 통합 분석하여 생성되었습니다.")
-# ------------------------------------------------------------------
-# 3. 간단 Q&A 챗봇 섹션
-# ------------------------------------------------------------------
-st.header("💬 주차 데이터 Q&A 챗봇")
-
-# 데이터프레임 준비 (위에서 이미 만들어둔 게 있으면 재사용)
-df_hourly = pd.DataFrame(hourly_avg_data)
-df_week = pd.DataFrame(weekday_avg_data)
-df_gate = pd.DataFrame(gate_share_data)
-
-if "chat_history" not in st.session_state:
-    st.session_state.chat_history = []
-
-# 기존 대화 출력
-for role, message in st.session_state.chat_history:
-    with st.chat_message(role):
-        st.markdown(message)
-
-user_input = st.chat_input("한림대 주차 패턴에 대해 궁금한 점을 물어보세요!")
-
-def answer_question(q: str) -> str:
-    q_lower = q.lower()
-
-    # 1) 피크 시간 관련
-    if "언제" in q and ("막혀" in q or "붐비" in q or "피크" in q):
-        peak_hour = kpi_data["peak_hour"]
-        # 해당 시간 전후 트래픽
-        around = df_hourly[df_hourly["Hour"].between(peak_hour-1, peak_hour+1)]
-        max_val = int(around["Avg_Count"].max())
-        return (
-            f"가장 막히는 시간은 **{peak_hour}시**입니다.\n\n"
-            f"- {peak_hour-1}~{peak_hour+1}시 사이에는 시간당 최대 **{max_val}대**까지 유입되며,\n"
-            f"  등교 시간(08시 전후)에 정문 주변 혼잡이 가장 심합니다."
-        )
-
-    # 2) 요일별 비교 (평일 vs 금요일 vs 주말)
-    if "요일" in q or "평일" in q or "주말" in q or "금요일" in q:
-        weekday_mean = df_week[df_week["Type"] == "Weekday"]["Avg_Count"].mean()
-        friday = int(df_week[df_week["Day"] == "Friday"]["Avg_Count"].iloc[0])
-        weekend_mean = df_week[df_week["Type"] == "Weekend"]["Avg_Count"].mean()
-        diff_fri = int(weekday_mean - friday)
-
-        return (
-            f"요일별 패턴은 다음과 같습니다.\n\n"
-            f"- **월~목 평균**: 약 **{int(weekday_mean):,}대**\n"
-            f"- **금요일**: 약 **{friday:,}대** (평일 평균 대비 **-{diff_fri:,}대** 감소)\n"
-            f"- **주말(토·일)**: 평균 **{int(weekend_mean):,}대**로, 평일의 약 1/3 수준입니다.\n\n"
-            f"따라서 혼잡을 피하고 싶다면 **금요일이나 주말**이 상대적으로 여유로운 편입니다."
-        )
-
-    # 3) 게이트별 쏠림 관련
-    if "정문" in q or "게이트" in q or "동문" in q or "서문" in q:
-        main_share = df_gate[df_gate["Gate"].str.contains("정문")]["Share"].sum()
-        east = df_gate[df_gate["Gate"] == "동문"]["Share"].iloc[0]
-        west = df_gate[df_gate["Gate"] == "서문"]["Share"].iloc[0]
-
-        return (
-            f"게이트별 유입 비중은 다음과 같습니다.\n\n"
-            f"- **정문(좌/우)**: 전체의 **{main_share:.1f}%**\n"
-            f"- **동문**: {east:.1f}%\n"
-            f"- **서문**: {west:.1f}%\n\n"
-            f"현재는 정문에 유입이 심하게 쏠려 있어, 등교 시간대에는 "
-            f"동문·서문 활용을 유도하는 안내가 효과적일 수 있습니다."
-        )
-
-    # 4) 기본 답변
-    return (
-        "아직 그 질문은 자동 분석에 연결되어 있지 않아요 😅\n"
-        "예를 들어 다음과 같이 물어볼 수 있어요:\n"
-        "- 언제 주차장이 가장 붐비나요?\n"
-        "- 평일이랑 주말 중에 언제가 더 한가해요?\n"
-        "- 정문이랑 다른 게이트 이용량 차이가 큰가요?"
-    )
-
-if user_input:
-    # 사용자 메시지 저장
-    st.session_state.chat_history.append(("user", user_input))
-
-    # 답변 생성
-    bot_reply = answer_question(user_input)
-    st.session_state.chat_history.append(("assistant", bot_reply))
-
-    # 화면에 즉시 출력
-    with st.chat_message("assistant"):
-        st.markdown(bot_reply)
-
