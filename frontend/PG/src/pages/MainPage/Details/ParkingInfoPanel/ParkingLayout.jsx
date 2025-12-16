@@ -19,7 +19,7 @@ const API_BASE =
 // Unity 씬 이름 (Unity 쪽과 정확히 일치)
 const BUILDING_SCENES = {
   eng: "GongHak",  // 공학관 씬
-  ilsong: "IlSong" // 일송관 씬
+  ilsong: "IlSong", // 일송관 씬
 };
 
 function ParkingLayout({ sceneName }) {
@@ -124,6 +124,20 @@ function ParkingLayout({ sceneName }) {
         id,
         scene,
         unityRef.current
+      );
+    }
+  };
+
+  // ✅ 탭 변경 핸들러: "전체" 누르면 Unity 혼잡도 리셋
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+
+    if (tab === "전체" && window.unityInstance) {
+      console.log("[Unity] 전체 탭 선택 → ShowSaturation 0.00");
+      window.unityInstance.SendMessage(
+        "Manager",
+        "ShowSaturation",
+        "0.00"
       );
     }
   };
@@ -309,7 +323,7 @@ function ParkingLayout({ sceneName }) {
 
         <InfoTabs
           activeTab={activeTab}
-          onTabChange={setActiveTab}
+          onTabChange={handleTabChange}
           hours={hours}
         />
 
