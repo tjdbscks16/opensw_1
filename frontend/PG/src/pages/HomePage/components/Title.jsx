@@ -1,15 +1,30 @@
 export default function Title() {
   return (
-    <h1 className="text-white text-6xl md:text-7xl leading-tight mb-2 font-extrabold drop-shadow-lg">
+    <h1 className="
+      text-white
+      text-6xl md:text-7xl
+      font-extrabold
+      tracking-tight
+      leading-snug
+      mb-3
+    ">
       Hallym University
       <br />
-      <span className="text-blue-400">
-        Smart Parking system
+      <span
+        className="
+          font-extrabold
+          bg-gradient-to-r
+          from-cyan-300 to-blue-500
+          bg-clip-text text-transparent
+          tracking-normal
+        "
+      >
+        Smart Parking System
       </span>
     </h1>
-
   );
 }
+
 
 // export default function Title() {
 //   return (
