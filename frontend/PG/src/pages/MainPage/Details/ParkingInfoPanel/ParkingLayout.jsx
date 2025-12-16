@@ -134,7 +134,7 @@ function ParkingLayout({ sceneName }) {
     [activeTab]
   );
 
-  // SummaryCards용 데이터
+  // SummaryCards용 데이터 (포화도는 카드에서만 사용)
   const summaryData = useMemo(() => {
     if (!buildingData || !totalActive || hours.length === 0)
       return null;
@@ -177,7 +177,40 @@ function ParkingLayout({ sceneName }) {
     activeTab,
   ]);
 
-  // 혼잡도 바 데이터
+  // 🔹 시간대별 혼잡도만 Unity로 전달 (0~100 → 0~1)
+  useEffect(() => {
+    // 전체 탭이면 전송 안 함
+    if (activeTab === "전체") return;
+    if (!buildingData || !window.unityInstance) return;
+
+    const hour = Number(activeTab.replace("시", ""));
+    const building = buildingData[selectedBuilding];
+    if (!building) return;
+
+    const metric = building.metrics[String(hour)];
+    if (!metric) return;
+
+    const congestion = Math.round(metric.congestion_percent); // 시간대별 혼잡도 (%)
+    const normalized = (congestion / 100).toFixed(2);         // 0~1
+
+    console.log(
+      "[Unity] ShowSaturation (hour congestion):",
+      hour,
+      "시 →",
+      congestion,
+      "%",
+      "→",
+      normalized
+    );
+
+    window.unityInstance.SendMessage(
+      "Manager",
+      "ShowSaturation",
+      normalized
+    );
+  }, [activeTab, buildingData, selectedBuilding]);
+
+  // 혼잡도 바 데이터 (화면 표시용)
   const congestionArray = useMemo(() => {
     if (!buildingData || hours.length === 0) return [];
     const building = buildingData[selectedBuilding];
