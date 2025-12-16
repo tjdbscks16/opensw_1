@@ -172,6 +172,7 @@ export default function HomePage() {
             onClick={handleSettingClick}
             className="
               w-11 h-11 rounded-full
+              flex items-center justify-center
               bg-white/10 backdrop-blur-md
               border border-white/20
               text-white text-xl
@@ -183,6 +184,7 @@ export default function HomePage() {
             <Settings />
           </button>
         </header>
+
 
         {/* 확장 애니메이션 오버레이 */}
         {isExpanding && (
@@ -212,22 +214,33 @@ export default function HomePage() {
           label="일송 주차장"
           onClick={() => handleMarkerClick("Ilsong")}
         />
-        <Marker type="red" top="55%" left="25%" label="도헌 주차장" />
+        <Marker type="red" top="50%" left="25%" label="도헌 주차장" />
         <Marker type="red" top="55%" left="90%" label="CLC 주차장" />
 
         {/* 🔹 왼쪽 텍스트 영역 – 자동차 랜딩 페이지처럼 분리감 주기 */}
-        <main className="absolute inset-0 flex items-center px-8 md:px-16">
-          <section className="relative z-20 max-w-2xl space-y-6">
+          <main className="absolute inset-0 flex items-center justify-start px-8 md:px-16">            <section className="relative z-20 max-w-2xl space-y-6 text-left">
             {/* 필요하면 상단 라벨 */}
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs md:text-sm text-gray-200 tracking-wide">
+            <span
+              className="
+                inline-flex items-center
+                px-3 py-1
+                rounded-full
+                bg-white/5 backdrop-blur-md
+                border border-white/15
+                text-xs md:text-sm
+                text-cyan-200/90
+                tracking-wide
+              "
+            >
               Smart Campus Parking
             </span>
+
 
             {/* 기존 Title 컴포넌트 */}
             <Title />
 
             {/* 서브텍스트 */}
-            <p className="text-sm md:text-base text-gray-200/80 max-w-md">
+            <p className="text-base md:text-lg text-gray-200/80 max-w-md leading-relaxed">
               주차 혼잡도를 한눈에 확인하고, 공대·일송·도헌·CLC
               주차장의 예상 혼잡 수준을 기반으로 최적의 주차 위치를 안내받으세요.
             </p>
