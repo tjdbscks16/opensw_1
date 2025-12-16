@@ -290,3 +290,4 @@ with row2_2:
 
 # Footer
 st.markdown("---")
+st.markdown("© 2025 OpenSW_1 팀 - 한림대학교 주차 데이터 분석 대시보드")
