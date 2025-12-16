@@ -19,7 +19,15 @@ export default function SettingButton() {
       {/* 톱니 버튼 */}
       <button
         onClick={handleClick}
-        className="w-11 h-11 rounded-full border-none bg-black bg-opacity-45 text-white text-xl cursor-pointer hover:bg-opacity-60 transition hover:scale-110"
+        className="
+          w-11 h-11 rounded-full
+          bg-white/10 backdrop-blur-md
+          border border-white/20
+          text-white text-xl
+          shadow-[0_8px_24px_rgba(0,0,0,0.6)]
+          hover:bg-white/20 hover:scale-110
+          transition
+        "
       >
         <Settings className="w-5 h-5 text-slate-200" />
       </button>

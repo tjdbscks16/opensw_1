@@ -133,6 +133,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Marker from "./components/Marker.jsx";
 import Title from "./components/Title.jsx";
+import { Settings } from 'lucide-react';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -148,7 +149,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-950">
+    <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-slate-900 via-slate-950 to-black">
       <div
         className="relative w-screen h-screen bg-cover bg-center overflow-hidden"
         style={{
@@ -158,15 +159,28 @@ export default function HomePage() {
         }}
       >
         {/* 🔹 왼쪽을 어둡게, 오른쪽은 투명하게 만드는 그라데이션 오버레이 */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent pointer-events-none" />
+        <div className="
+          absolute inset-0
+          bg-gradient-to-r
+          from-slate-950/90 via-slate-900/60 to-transparent
+          pointer-events-none
+        " />
 
         {/* 상단 설정 버튼 */}
         <header className="absolute top-3 right-3 flex gap-2 z-30">
           <button
             onClick={handleSettingClick}
-            className="w-11 h-11 rounded-full bg-black/45 text-white text-xl hover:bg-opacity-60 transition hover:scale-110"
+            className="
+              w-11 h-11 rounded-full
+              bg-white/10 backdrop-blur-md
+              border border-white/20
+              text-white text-xl
+              shadow-[0_8px_24px_rgba(0,0,0,0.6)]
+              hover:bg-white/20 hover:scale-110
+              transition
+            "
           >
-            ⚙️
+            <Settings />
           </button>
         </header>
 
@@ -203,7 +217,7 @@ export default function HomePage() {
 
         {/* 🔹 왼쪽 텍스트 영역 – 자동차 랜딩 페이지처럼 분리감 주기 */}
         <main className="absolute inset-0 flex items-center px-8 md:px-16">
-          <section className="relative z-20 max-w-xl space-y-6">
+          <section className="relative z-20 max-w-2xl space-y-6">
             {/* 필요하면 상단 라벨 */}
             <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs md:text-sm text-gray-200 tracking-wide">
               Smart Campus Parking
@@ -218,18 +232,35 @@ export default function HomePage() {
               주차장의 예상 혼잡 수준을 기반으로 최적의 주차 위치를 안내받으세요.
             </p>
 
-            {/* CTA 버튼 영역 */}
             <div className="flex flex-wrap gap-3 pt-2">
+              {/* 메인 CTA */}
               <button
                 onClick={() => window.open("http://210.115.227.111:8501", "_blank")}
-                className="px-6 py-3 rounded-full bg-blue-600 text-white text-sm md:text-base font-semibold shadow-lg shadow-blue-600/40 hover:bg-blue-500 transition"
+                className="
+                  px-6 py-3 rounded-full
+                  bg-gradient-to-r from-blue-500 to-cyan-500
+                  text-white text-sm md:text-base font-semibold
+                  shadow-[0_10px_30px_rgba(59,130,246,0.5)]
+                  hover:shadow-[0_15px_40px_rgba(59,130,246,0.7)]
+                  hover:scale-[1.03]
+                  transition
+                "
               >
                 한림대 주차 데이터 분석
               </button>
 
+              {/* 튜토리얼 CTA – 밝은 민트 네온 */}
               <button
                 onClick={handleSettingClick}
-                className="px-5 py-3 rounded-full bg-white/10 text-white text-sm md:text-base border border-white/30 hover:bg-white/20 transition"
+                className="
+                  px-6 py-3 rounded-full
+                  bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400
+                  text-gray-200 text-sm md:text-base font-semibold
+                  shadow-[0_0_25px_rgba(52,211,153,0.9),0_0_60px_rgba(34,197,94,0.4)]
+                  hover:shadow-[0_0_30px_rgba(52,211,153,0.9)]
+                  hover:scale-[1.03]
+                  transition
+                "
               >
                 튜토리얼 보기
               </button>
