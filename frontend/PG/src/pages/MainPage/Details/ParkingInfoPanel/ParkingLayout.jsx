@@ -228,7 +228,7 @@ function ParkingLayout({ sceneName }) {
       {/* 정보 패널 영역 */}
       <section className="basis-[30%] max-w-md p-4 flex flex-col space-y-4 bg-white/10 backdrop-blur-2xl border-l border-white/15 shadow-[0_0_40px_rgba(0,0,0,0.65)]">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs text-slate-300">
+          <span className="text-base text-slate-300">
             건물 선택
           </span>
           <div className="inline-flex rounded-full bg-white/10 p-1 space-x-1">
