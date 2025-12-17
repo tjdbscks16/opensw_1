@@ -72,81 +72,81 @@ function SummaryCards({ totalSpaces, availablePrediction, saturation }) {
 
   return (
     <div className="space-y-4 font-stardust">
-      {/* ===== 총 주차 대수 (Cyan - Fixed) ===== */}
+      {/* ===== 총 주차 대수 (Gold/Yellow Theme) ===== */}
       <div
         className="
           relative group
-          rounded-2xl border border-cyan-400/20
+          rounded-2xl border border-yellow-400/20
           bg-[#0B1C3A]/60 backdrop-blur-xl
-          hover:bg-[#0B1C3A]/80 hover:border-cyan-400/40
+          hover:bg-[#0B1C3A]/80 hover:border-yellow-400/40
           transition-all duration-300
           p-5 flex items-center justify-between
           overflow-hidden
         "
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
         <div className="relative flex items-center space-x-4">
           <div
             className="
               w-12 h-12 rounded-2xl
-              bg-[#020B1A] border border-cyan-500/30
+              bg-[#020B1A] border border-yellow-500/30
               flex items-center justify-center
-              shadow-[0_0_15px_rgba(34,211,238,0.15)]
+              shadow-[0_0_15px_rgba(234,179,8,0.15)]
             "
           >
-            <Car className="w-6 h-6 text-cyan-400" />
+            <Car className="w-6 h-6 text-yellow-400" />
           </div>
 
           <div>
-            <p className="text-xs text-cyan-200/70 mb-0.5">총 주차 대수</p>
-            <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
+            <p className="text-xs text-yellow-200/70 mb-0.5">총 주차 대수</p>
+            <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(250,204,21,0.3)]">
               {totalSpaces.toLocaleString()}
-              <span className="text-sm font-normal text-cyan-200/50 ml-1">대</span>
+              <span className="text-sm font-normal text-yellow-200/50 ml-1">대</span>
             </p>
           </div>
         </div>
       </div>
 
-      {/* ===== 주차 가능 예측 (Indigo Purple - Changed) ===== */}
+      {/* ===== 주차 가능 예측 (Pink/Crimson Theme) - 수정됨 ===== */}
       <div
         className="
           relative group
-          rounded-2xl border border-indigo-400/20
+          rounded-2xl border border-pink-400/20
           bg-[#0B1C3A]/60 backdrop-blur-xl
-          hover:bg-[#0B1C3A]/80 hover:border-indigo-400/40
+          hover:bg-[#0B1C3A]/80 hover:border-pink-400/40
           transition-all duration-300
           p-5 flex items-center justify-between
           overflow-hidden
         "
       >
-        {/* 배경 그라데이션 (Indigo) */}
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        {/* 배경 그라데이션 (Pink) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
         <div className="relative flex items-center space-x-4">
-          {/* 아이콘 박스 (Indigo Neon) */}
+          {/* 아이콘 박스 (Pink Neon) */}
           <div
             className="
               w-12 h-12 rounded-2xl
-              bg-[#020B1A] border border-indigo-500/30
+              bg-[#020B1A] border border-pink-500/30
               flex items-center justify-center
-              shadow-[0_0_15px_rgba(129,140,248,0.15)]
+              shadow-[0_0_15px_rgba(244,114,182,0.15)]
             "
           >
-            <ParkingSquare className="w-6 h-6 text-indigo-400" />
+            <ParkingSquare className="w-6 h-6 text-pink-400" />
           </div>
 
           <div>
-            <p className="text-xs text-indigo-200/70 mb-0.5">주차 가능 예측</p>
-            <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(129,140,248,0.3)]">
+            <p className="text-xs text-pink-200/70 mb-0.5">주차 가능 예측</p>
+            <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(244,114,182,0.3)]">
               {availablePrediction.toLocaleString()}
-              <span className="text-sm font-normal text-indigo-200/50 ml-1">대</span>
+              <span className="text-sm font-normal text-pink-200/50 ml-1">대</span>
             </p>
           </div>
         </div>
 
-        {/* 뱃지 (Indigo) */}
-        <span className="text-xs font-medium text-indigo-400 bg-indigo-400/10 px-2 py-1 rounded border border-indigo-400/20">
+        {/* 뱃지 (Pink) */}
+        <span className="text-xs font-medium text-pink-400 bg-pink-400/10 px-2 py-1 rounded border border-pink-400/20">
           추정
         </span>
       </div>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Clock } from 'lucide-react';
 
 function InfoTabs({ activeTab, onTabChange, hours = [8, 9, 13] }) {
   const tabs = ["전체", ...hours.map((h) => `${h}시`)];
@@ -12,9 +13,12 @@ function InfoTabs({ activeTab, onTabChange, hours = [8, 9, 13] }) {
         p-2 flex items-center justify-between
       "
     >
-      <h2 className="pl-3 text-sm font-bold text-cyan-100/90 tracking-wider">
+      {/* 🔹 수정됨: flex와 gap-2를 추가하여 아이콘과 텍스트 정렬 */}
+      <h2 className="pl-3 flex items-center gap-2 text-base font-bold text-cyan-100/90 tracking-wider">
+        <Clock className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
         시간대
       </h2>
+      
       <div className="flex bg-[#020B1A]/60 rounded-xl p-1 gap-1">
         {tabs.map((tab) => {
           const isActive = tab === activeTab;

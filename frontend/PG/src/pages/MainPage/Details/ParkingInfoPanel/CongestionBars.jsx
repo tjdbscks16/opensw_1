@@ -1,5 +1,5 @@
-// src/pages/MainPage/Details/ParkingInfoPanel/CongestionBars.jsx
 import React from "react";
+import { Users } from 'lucide-react';
 
 function CongestionBars({ data, activeTab }) {
   return (
@@ -11,11 +11,14 @@ function CongestionBars({ data, activeTab }) {
         font-stardust
       "
     >
-      {/* 헤더 */}
+      {/* 헤더: 아이콘 적용 */}
       <div className="flex items-center justify-between pb-2 border-b border-cyan-400/10">
-        <h3 className="text-base font-bold tracking-wide text-cyan-50">
-          시간대별 혼잡도
-        </h3>
+        <div className="flex items-center gap-2">
+          <Users className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.6)]" />
+          <h3 className="text-base font-bold tracking-wide text-cyan-50">
+            시간대별 혼잡도
+          </h3>
+        </div>
         <span className="text-[10px] text-cyan-200/50">
           0% (여유) ~ 100% (만차)
         </span>
@@ -41,9 +44,8 @@ function CongestionBars({ data, activeTab }) {
                 </span>
               </div>
 
-              {/* ✅ 바 트랙 (여기를 h-4로 변경하여 두께 증가) */}
+              {/* 바 트랙 (두께 h-4) */}
               <div className="flex-1 h-4 rounded-full bg-[#020B1A] overflow-hidden border border-white/5 shadow-inner">
-                {/* 내부 채워지는 바 (h-full 이므로 부모 높이 따라감) */}
                 <div
                   className={`
                     h-full rounded-full ${item.color}
