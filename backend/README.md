@@ -5,6 +5,22 @@
 
 
 ## 실행 방법 (예정)
+# Backend 실행 방법
+
+1. 가상환경 생성 및 활성화
+   - python -m venv .venv
+   - .venv\Scripts\Activate.ps1
+
+2. 라이브러리 설치
+   - pip install -r requirements.txt  (또는 pandas, fastapi, uvicorn 등)
+
+3. (선택) 데이터 다시 만들고 싶으면
+   - python prepare.py
+
+4. 서버 실행
+   - python main.py
+   - API 문서: http://localhost:8000/docs
+
 
 ```bash
 cd C:\Users\YunchanSeo\Desktop\opensw_1   # 1) 루트로

@@ -11,7 +11,10 @@ import CongestionBars from "./CongestionBars";
 import FeeCalculator from "./FeeCalculator";
 import UnityViewer from "./UnityViewer";
 
-const API_BASE = "http://210.115.227.111:8000";
+const API_BASE =
+  import.meta.env.MODE === "development"
+    ? "http://210.115.227.111:8000" // 로컬 개발 시: 직접 백엔드 IP 호출
+    : "";                            // Vercel 배포 시: 동일 도메인(/api)으로 프록시 사용
 
 const BUILDING_SCENES = {
   eng: "GongHak",  
@@ -107,6 +110,21 @@ function ParkingLayout({ sceneName }) {
     }
   };
 
+  // ✅ 탭 변경 핸들러: "전체" 누르면 Unity 혼잡도 리셋
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+
+    if (tab === "전체" && window.unityInstance) {
+      console.log("[Unity] 전체 탭 선택 → ShowSaturation 0.00");
+      window.unityInstance.SendMessage(
+        "Manager",
+        "ShowSaturation",
+        "0.00"
+      );
+    }
+  };
+
+  // 현재 선택된 시간 (숫자)
   const activeHour = useMemo(
     () => (activeTab === "전체" ? null : Number(activeTab.replace("시", ""))),
     [activeTab]
@@ -208,26 +226,34 @@ function ParkingLayout({ sceneName }) {
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#020B1A]">
+    <div
+      className="
+        flex flex-col md:flex-row          /* 모바일: 세로, 데스크톱: 가로 */
+        h-screen w-screen
+        overflow-hidden
+        bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900
+        shadow-[0_30px_80px_rgba(0,0,0,0.7)]
+      "
+    >
       {/* Unity 3D 영역 */}
-      <section className="flex-1 basis-[70%] relative">
+      <section className="w-full md:flex-1 md:basis-[70%] h-1/2 md:h-full">
         <UnityViewer ref={unityRef} onUnityReady={handleUnityReady} />
       </section>
 
-      {/* 정보 패널 영역 (Dark Navy 테마 적용) */}
-      <section 
+      {/* 정보 패널 영역 */}
+      <section
         className="
-          basis-[30%] max-w-md p-5 flex flex-col space-y-5 
-          bg-[#06142F]/95 backdrop-blur-3xl 
-          border-l border-cyan-400/20 
-          shadow-[-20px_0_40px_rgba(0,0,0,0.5)]
-          font-stardust
+          w-full md:basis-[30%] md:max-w-md
+          h-1/2 md:h-full
+          p-4 flex flex-col space-y-4
+          bg-white/10 backdrop-blur-2xl
+          border-t md:border-t-0 md:border-l border-white/15
+          shadow-[0_0_40px_rgba(0,0,0,0.65)]
         "
       >
-        {/* 건물 선택 헤더 */}
-        <div className="flex items-center justify-between pb-2 border-b border-cyan-400/10">
-          <span className="text-lg font-bold text-white tracking-wide drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]">
-            주차 현황판
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-base text-slate-300">
+            건물 선택
           </span>
           
           <div className="inline-flex rounded-xl bg-[#020B1A] p-1 space-x-1 border border-cyan-400/20">
@@ -256,7 +282,7 @@ function ParkingLayout({ sceneName }) {
 
         <InfoTabs
           activeTab={activeTab}
-          onTabChange={setActiveTab}
+          onTabChange={handleTabChange}
           hours={hours}
         />
 
