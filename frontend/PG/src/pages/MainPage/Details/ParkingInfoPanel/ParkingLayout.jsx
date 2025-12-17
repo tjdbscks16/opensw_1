@@ -228,28 +228,49 @@ function ParkingLayout({ sceneName }) {
   }, [activeTab, buildingData, selectedBuilding]);
 
   // 혼잡도 바 데이터 (화면 표시용)
-  const congestionArray = useMemo(() => {
-    if (!buildingData || hours.length === 0) return [];
-    const building = buildingData[selectedBuilding];
-    if (!building) return [];
+ // 혼잡도 바 데이터 (화면 표시용)
+const congestionArray = useMemo(() => {
+  if (!buildingData || hours.length === 0) return [];
+  const building = buildingData[selectedBuilding];
+  if (!building) return [];
 
-    return hours.map((h) => {
-      const metric = building.metrics[String(h)];
-      const value = Math.round(
-        metric.congestion_percent
-      );
+  return hours.map((h) => {
+    const metric = building.metrics[String(h)];
+    const value = Math.round(metric.congestion_percent);
 
-      let color = "bg-emerald-400";
-      if (h === 9) color = "bg-rose-500";
-      else if (h === 13) color = "bg-amber-400";
+    // 기본: 여유 (Mint → Cyan)
+    let color = `
+      bg-gradient-to-r
+      from-emerald-400/90 via-teal-400/90 to-cyan-400/90
+    `;
+    let glow = "shadow-[0_0_18px_rgba(52,211,153,0.75)]";
 
-      return {
-        label: `${h}시`,
-        value,
-        color,
-      };
-    });
-  }, [buildingData, hours, selectedBuilding]);
+    // 혼잡 시간대 (Rose → Fuchsia)
+    if (h === 9) {
+      color = `
+        bg-gradient-to-r
+        from-rose-500/95 via-pink-500/95 to-fuchsia-500/95
+      `;
+      glow = "shadow-[0_0_20px_rgba(244,63,94,0.9)]";
+    }
+    // 주의 시간대 (Amber → Orange)
+    else if (h === 13) {
+      color = `
+        bg-gradient-to-r
+        from-amber-400/95 via-orange-400/95 to-amber-500/95
+      `;
+      glow = "shadow-[0_0_18px_rgba(251,191,36,0.85)]";
+    }
+
+    return {
+      label: `${h}시`,
+      value,
+      color,
+      glow, // ✅ active 시에만 적용
+    };
+  });
+}, [buildingData, hours, selectedBuilding]);
+
 
   // 로딩/에러
   if (loading) {

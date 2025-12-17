@@ -8,6 +8,7 @@ export default {
         extend: {
             fontFamily: {
                 stardust: ['PfStardust30', 'sans-serif'],
+                boldround: ['BoldRound', 'sans-serif'],
             },
         },
     },

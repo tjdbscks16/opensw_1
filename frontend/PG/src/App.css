@@ -23,7 +23,17 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'BoldRound';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2507-2@1.0/BoldDungGeunMo.woff2')
+        format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+
+
 /* src/index.css */
 body {
     @apply font-stardust;
 }
+
