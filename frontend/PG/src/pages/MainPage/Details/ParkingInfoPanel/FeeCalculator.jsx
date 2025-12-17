@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { Calculator } from 'lucide-react';
 
 const RATE_PER_10_MIN = 300;
 
@@ -30,20 +31,23 @@ function FeeCalculator() {
   return (
     <section
       className="
-        rounded-2xl border border-cyan-400/20
+        rounded-2xl border border-violet-400/20
         bg-[#0B1C3A]/80 backdrop-blur-xl
         p-5 space-y-4
         font-stardust
+        shadow-[0_0_20px_rgba(139,92,246,0.05)]
       "
     >
-      <h3 className="text-base font-bold tracking-wide text-cyan-50 border-b border-cyan-400/10 pb-2">
+      {/* 헤더: 아이콘 적용 */}
+      <h3 className="text-base font-bold tracking-wide text-violet-50 border-b border-violet-400/10 pb-2 flex items-center gap-2">
+        <Calculator className="w-5 h-5 text-violet-400 drop-shadow-[0_0_8px_rgba(167,139,250,0.6)]" />
         주차 요금 계산기
       </h3>
 
       <div className="grid gap-4 text-sm">
         {/* 입력: 시간 */}
         <div className="flex flex-col space-y-1.5">
-          <label className="text-cyan-200/80 text-xs font-medium">
+          <label className="text-violet-200/80 text-xs font-medium">
             이용 시간 (시간 단위)
           </label>
           <input
@@ -51,11 +55,12 @@ function FeeCalculator() {
             min="0"
             step="0.5"
             className="
-              w-full rounded-lg border border-cyan-400/30
+              w-full rounded-lg border border-violet-400/30
               bg-[#020B1A] text-white
               px-3 py-2.5 text-sm tabular-nums
-              focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
+              focus:outline-none focus:border-violet-400 focus:ring-1 focus:ring-violet-400
               placeholder-slate-600 transition-colors
+              selection:bg-violet-500/30
             "
             value={hours}
             onChange={(e) => setHours(e.target.value)}
@@ -65,8 +70,8 @@ function FeeCalculator() {
         {/* 토글: 할인 대상 */}
         <div className="flex items-center justify-between bg-[#020B1A]/50 p-3 rounded-xl border border-white/5">
           <div>
-            <p className="text-sm text-cyan-100 font-medium">학생 / 교직원</p>
-            <p className="text-[10px] text-cyan-200/40">기본 요금 50% 할인</p>
+            <p className="text-sm text-violet-100 font-medium">학생 / 교직원</p>
+            <p className="text-[10px] text-violet-200/40">기본 요금 50% 할인</p>
           </div>
           <button
             type="button"
@@ -75,7 +80,7 @@ function FeeCalculator() {
               w-11 h-6 rounded-full flex items-center px-1 transition-colors duration-300
               ${
                 hasPass
-                  ? "bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
+                  ? "bg-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.4)]"
                   : "bg-slate-700"
               }
             `}
@@ -91,17 +96,18 @@ function FeeCalculator() {
 
         {/* 입력: 할인 금액 */}
         <div className="flex flex-col space-y-1.5">
-          <label className="text-cyan-200/80 text-xs font-medium">
+          <label className="text-violet-200/80 text-xs font-medium">
             추가 할인 금액 (원)
           </label>
           <input
             type="number"
             min="0"
             className="
-              w-full rounded-lg border border-cyan-400/30
+              w-full rounded-lg border border-violet-400/30
               bg-[#020B1A] text-white
               px-3 py-2.5 text-sm tabular-nums
-              focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
+              focus:outline-none focus:border-violet-400 focus:ring-1 focus:ring-violet-400
+              selection:bg-violet-500/30
             "
             value={discount}
             onChange={(e) => setDiscount(e.target.value)}
@@ -110,17 +116,17 @@ function FeeCalculator() {
       </div>
 
       {/* 결과 요약 */}
-      <div className="mt-2 pt-3 border-t border-cyan-400/20 space-y-2 text-xs">
-        <div className="flex justify-between items-center text-cyan-200/60">
+      <div className="mt-2 pt-3 border-t border-violet-400/20 space-y-2 text-xs">
+        <div className="flex justify-between items-center text-violet-200/60">
           <span>기본 요금</span>
           <span className="tabular-nums">{base.toLocaleString()}원</span>
         </div>
 
         <div className="flex justify-between items-center">
-          <span className="text-cyan-100 font-bold text-sm">최종 예상 금액</span>
-          <span className="font-bold text-xl tabular-nums text-cyan-300 drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]">
+          <span className="text-violet-100 font-bold text-sm">최종 예상 금액</span>
+          <span className="font-bold text-xl tabular-nums text-violet-300 drop-shadow-[0_0_5px_rgba(167,139,250,0.5)]">
             {total.toLocaleString()}
-            <span className="font-normal text-xs text-cyan-200/50 ml-1">원</span>
+            <span className="font-normal text-xs text-violet-200/50 ml-1">원</span>
           </span>
         </div>
       </div>
@@ -129,6 +135,138 @@ function FeeCalculator() {
 }
 
 export default FeeCalculator;
+
+// import React, { useState, useMemo } from "react";
+
+// const RATE_PER_10_MIN = 300;
+
+// function FeeCalculator() {
+//   const [hours, setHours] = useState(1);
+//   const [hasPass, setHasPass] = useState(false);
+//   const [discount, setDiscount] = useState(0);
+
+//   const { total, base, effectiveRatePer10Min } = useMemo(() => {
+//     const parsedHours = isNaN(Number(hours)) ? 0 : Number(hours);
+//     const parsedDiscount = isNaN(Number(discount)) ? 0 : Number(discount);
+
+//     const minutes = Math.max(0, parsedHours * 60);
+
+//     let ratePer10Min = RATE_PER_10_MIN;
+//     if (hasPass) ratePer10Min = RATE_PER_10_MIN * 0.5;
+
+//     const units = minutes / 10;
+//     const baseFee = units * ratePer10Min;
+//     const finalFee = Math.max(0, baseFee - parsedDiscount);
+
+//     return {
+//       total: Math.round(finalFee),
+//       base: Math.round(baseFee),
+//       effectiveRatePer10Min: Math.round(ratePer10Min),
+//     };
+//   }, [hours, discount, hasPass]);
+
+//   return (
+//     <section
+//       className="
+//         rounded-2xl border border-cyan-400/20
+//         bg-[#0B1C3A]/80 backdrop-blur-xl
+//         p-5 space-y-4
+//         font-stardust
+//       "
+//     >
+//       <h3 className="text-base font-bold tracking-wide text-cyan-50 border-b border-cyan-400/10 pb-2">
+//         주차 요금 계산기
+//       </h3>
+
+//       <div className="grid gap-4 text-sm">
+//         {/* 입력: 시간 */}
+//         <div className="flex flex-col space-y-1.5">
+//           <label className="text-cyan-200/80 text-xs font-medium">
+//             이용 시간 (시간 단위)
+//           </label>
+//           <input
+//             type="number"
+//             min="0"
+//             step="0.5"
+//             className="
+//               w-full rounded-lg border border-cyan-400/30
+//               bg-[#020B1A] text-white
+//               px-3 py-2.5 text-sm tabular-nums
+//               focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
+//               placeholder-slate-600 transition-colors
+//             "
+//             value={hours}
+//             onChange={(e) => setHours(e.target.value)}
+//           />
+//         </div>
+
+//         {/* 토글: 할인 대상 */}
+//         <div className="flex items-center justify-between bg-[#020B1A]/50 p-3 rounded-xl border border-white/5">
+//           <div>
+//             <p className="text-sm text-cyan-100 font-medium">학생 / 교직원</p>
+//             <p className="text-[10px] text-cyan-200/40">기본 요금 50% 할인</p>
+//           </div>
+//           <button
+//             type="button"
+//             onClick={() => setHasPass((p) => !p)}
+//             className={`
+//               w-11 h-6 rounded-full flex items-center px-1 transition-colors duration-300
+//               ${
+//                 hasPass
+//                   ? "bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
+//                   : "bg-slate-700"
+//               }
+//             `}
+//           >
+//             <span
+//               className={`
+//                 w-4 h-4 rounded-full bg-white shadow-md transform transition-transform duration-300
+//                 ${hasPass ? "translate-x-5" : "translate-x-0"}
+//               `}
+//             />
+//           </button>
+//         </div>
+
+//         {/* 입력: 할인 금액 */}
+//         <div className="flex flex-col space-y-1.5">
+//           <label className="text-cyan-200/80 text-xs font-medium">
+//             추가 할인 금액 (원)
+//           </label>
+//           <input
+//             type="number"
+//             min="0"
+//             className="
+//               w-full rounded-lg border border-cyan-400/30
+//               bg-[#020B1A] text-white
+//               px-3 py-2.5 text-sm tabular-nums
+//               focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
+//             "
+//             value={discount}
+//             onChange={(e) => setDiscount(e.target.value)}
+//           />
+//         </div>
+//       </div>
+
+//       {/* 결과 요약 */}
+//       <div className="mt-2 pt-3 border-t border-cyan-400/20 space-y-2 text-xs">
+//         <div className="flex justify-between items-center text-cyan-200/60">
+//           <span>기본 요금</span>
+//           <span className="tabular-nums">{base.toLocaleString()}원</span>
+//         </div>
+
+//         <div className="flex justify-between items-center">
+//           <span className="text-cyan-100 font-bold text-sm">최종 예상 금액</span>
+//           <span className="font-bold text-xl tabular-nums text-cyan-300 drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]">
+//             {total.toLocaleString()}
+//             <span className="font-normal text-xs text-cyan-200/50 ml-1">원</span>
+//           </span>
+//         </div>
+//       </div>
+//     </section>
+//   );
+// }
+
+// export default FeeCalculator;
 
 // // src/pages/MainPage/Details/ParkingInfoPanel/FeeCalculator.jsx
 // import React, { useState, useMemo } from "react";
