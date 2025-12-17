@@ -29,11 +29,45 @@ function TutorialStep2() {
     return { totalSpaces, availablePrediction, saturation: currentSaturation };
   }, [activeTab]);
 
+  // const congestionArray = [
+  //   { label: "8시", value: congestionData["8시"], color: "bg-emerald-400" },
+  //   { label: "9시", value: congestionData["9시"], color: "bg-rose-500" },
+  //   { label: "13시", value: congestionData["13시"], color: "bg-amber-400" },
+  // ];
+
   const congestionArray = [
-    { label: "8시", value: congestionData["8시"], color: "bg-emerald-400" },
-    { label: "9시", value: congestionData["9시"], color: "bg-rose-500" },
-    { label: "13시", value: congestionData["13시"], color: "bg-amber-400" },
-  ];
+  {
+    label: "8시",
+    value: congestionData["8시"],
+    // 여유 (Cool Mint → Cyan)
+    color: `
+      bg-gradient-to-r
+      from-emerald-400/90 via-teal-400/90 to-cyan-400/90
+    `,
+    glow: "shadow-[0_0_18px_rgba(52,211,153,0.8)]",
+  },
+  {
+    label: "9시",
+    value: congestionData["9시"],
+    // 혼잡 (Rose → Fuchsia)
+    color: `
+      bg-gradient-to-r
+      from-rose-500/95 via-pink-500/95 to-fuchsia-500/95
+    `,
+    glow: "shadow-[0_0_18px_rgba(244,63,94,0.9)]",
+  },
+  {
+    label: "13시",
+    value: congestionData["13시"],
+    // 주의 (Amber → Orange)
+    color: `
+      bg-gradient-to-r
+      from-amber-400/95 via-orange-400/95 to-amber-500/95
+    `,
+    glow: "shadow-[0_0_18px_rgba(251,191,36,0.85)]",
+  },
+];
+
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] gap-8">

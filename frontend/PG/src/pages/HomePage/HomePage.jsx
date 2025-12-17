@@ -159,12 +159,14 @@ export default function HomePage() {
         }}
       >
         {/* 🔹 왼쪽을 어둡게, 오른쪽은 투명하게 만드는 그라데이션 오버레이 */}
-        <div className="
-          absolute inset-0
-          bg-gradient-to-r
-          from-slate-950/90 via-slate-900/60 to-transparent
-          pointer-events-none
-        " />
+        <div
+          className="
+            absolute inset-0
+            bg-gradient-to-r
+            from-[#020B1A]/90 via-[#122B52]/40 to-transparent
+            pointer-events-none
+          "
+        />
 
         {/* 상단 설정 버튼 */}
         <header className="absolute top-3 right-3 flex gap-2 z-30">
