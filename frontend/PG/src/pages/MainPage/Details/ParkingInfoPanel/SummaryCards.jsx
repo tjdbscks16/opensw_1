@@ -1,10 +1,78 @@
-import React from "react";
+// src/pages/MainPage/Details/ParkingInfoPanel/SummaryCards.jsx
+import React, { useMemo } from "react";
 import { ParkingSquare, BarChart3, Car } from "lucide-react";
 
 function SummaryCards({ totalSpaces, availablePrediction, saturation }) {
+  
+  // 🔹 포화도에 따른 상태(색상, 라벨, 스타일) 결정 로직 (변경 없음)
+  const saturationStatus = useMemo(() => {
+    if (saturation == null) return null;
+
+    // 🚨 80% 이상: 혼잡 (Red/Rose)
+    if (saturation >= 80) {
+      return {
+        label: "혼잡",
+        styles: {
+          border: "border-rose-400/20",
+          hoverBorder: "hover:border-rose-400/40",
+          bgGradient: "from-rose-500/5",
+          iconBoxBorder: "border-rose-500/30",
+          iconShadow: "shadow-[0_0_15px_rgba(251,113,133,0.15)]",
+          iconColor: "text-rose-400",
+          titleText: "text-rose-200/70",
+          valueShadow: "drop-shadow-[0_0_8px_rgba(251,113,133,0.3)]",
+          unitText: "text-rose-200/50",
+          badgeText: "text-rose-400",
+          badgeBg: "bg-rose-400/10",
+          badgeBorder: "border-rose-400/20",
+        },
+      };
+    }
+    // ⚠️ 50% ~ 79%: 보통 (Orange/Amber)
+    else if (saturation >= 50) {
+      return {
+        label: "보통",
+        styles: {
+          border: "border-amber-400/20",
+          hoverBorder: "hover:border-amber-400/40",
+          bgGradient: "from-amber-500/5",
+          iconBoxBorder: "border-amber-500/30",
+          iconShadow: "shadow-[0_0_15px_rgba(251,191,36,0.15)]",
+          iconColor: "text-amber-400",
+          titleText: "text-amber-200/70",
+          valueShadow: "drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]",
+          unitText: "text-amber-200/50",
+          badgeText: "text-amber-400",
+          badgeBg: "bg-amber-400/10",
+          badgeBorder: "border-amber-400/20",
+        },
+      };
+    }
+    // ✅ 50% 미만: 여유 (Green/Emerald)
+    else {
+      return {
+        label: "여유",
+        styles: {
+          border: "border-emerald-400/20",
+          hoverBorder: "hover:border-emerald-400/40",
+          bgGradient: "from-emerald-500/5",
+          iconBoxBorder: "border-emerald-500/30",
+          iconShadow: "shadow-[0_0_15px_rgba(52,211,153,0.15)]",
+          iconColor: "text-emerald-400",
+          titleText: "text-emerald-200/70",
+          valueShadow: "drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]",
+          unitText: "text-emerald-200/50",
+          badgeText: "text-emerald-400",
+          badgeBg: "bg-emerald-400/10",
+          badgeBorder: "border-emerald-400/20",
+        },
+      };
+    }
+  }, [saturation]);
+
   return (
     <div className="space-y-4 font-stardust">
-      {/* ===== 총 주차 대수 ===== */}
+      {/* ===== 총 주차 대수 (Cyan - Fixed) ===== */}
       <div
         className="
           relative group
@@ -40,84 +108,110 @@ function SummaryCards({ totalSpaces, availablePrediction, saturation }) {
         </div>
       </div>
 
-      {/* ===== 주차 가능 예측 (Emerald Point) ===== */}
+      {/* ===== 주차 가능 예측 (Indigo Purple - Changed) ===== */}
       <div
         className="
           relative group
-          rounded-2xl border border-emerald-400/20
+          rounded-2xl border border-indigo-400/20
           bg-[#0B1C3A]/60 backdrop-blur-xl
-          hover:bg-[#0B1C3A]/80 hover:border-emerald-400/40
+          hover:bg-[#0B1C3A]/80 hover:border-indigo-400/40
           transition-all duration-300
           p-5 flex items-center justify-between
           overflow-hidden
         "
       >
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        {/* 배경 그라데이션 (Indigo) */}
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
         <div className="relative flex items-center space-x-4">
+          {/* 아이콘 박스 (Indigo Neon) */}
           <div
             className="
               w-12 h-12 rounded-2xl
-              bg-[#020B1A] border border-emerald-500/30
+              bg-[#020B1A] border border-indigo-500/30
               flex items-center justify-center
-              shadow-[0_0_15px_rgba(52,211,153,0.15)]
+              shadow-[0_0_15px_rgba(129,140,248,0.15)]
             "
           >
-            <ParkingSquare className="w-6 h-6 text-emerald-400" />
+            <ParkingSquare className="w-6 h-6 text-indigo-400" />
           </div>
 
           <div>
-            <p className="text-xs text-emerald-200/70 mb-0.5">주차 가능 예측</p>
-            <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]">
+            <p className="text-xs text-indigo-200/70 mb-0.5">주차 가능 예측</p>
+            <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(129,140,248,0.3)]">
               {availablePrediction.toLocaleString()}
-              <span className="text-sm font-normal text-emerald-200/50 ml-1">대</span>
+              <span className="text-sm font-normal text-indigo-200/50 ml-1">대</span>
             </p>
           </div>
         </div>
 
-        <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded border border-emerald-400/20">
-          실시간
+        {/* 뱃지 (Indigo) */}
+        <span className="text-xs font-medium text-indigo-400 bg-indigo-400/10 px-2 py-1 rounded border border-indigo-400/20">
+          추정
         </span>
       </div>
 
-      {/* ===== 포화도 (Rose Point) ===== */}
-      {saturation != null && (
+      {/* ===== 포화도 (Dynamic Color & Label) ===== */}
+      {saturation != null && saturationStatus && (
         <div
-          className="
+          className={`
             relative group
-            rounded-2xl border border-rose-400/20
+            rounded-2xl border
             bg-[#0B1C3A]/60 backdrop-blur-xl
-            hover:bg-[#0B1C3A]/80 hover:border-rose-400/40
+            hover:bg-[#0B1C3A]/80
             transition-all duration-300
             p-5 flex items-center justify-between
             overflow-hidden
-          "
+            ${saturationStatus.styles.border}
+            ${saturationStatus.styles.hoverBorder}
+          `}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-rose-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div
+            className={`
+              absolute inset-0 bg-gradient-to-r to-transparent opacity-0 group-hover:opacity-100 transition-opacity
+              ${saturationStatus.styles.bgGradient}
+            `}
+          />
 
           <div className="relative flex items-center space-x-4">
             <div
-              className="
+              className={`
                 w-12 h-12 rounded-2xl
-                bg-[#020B1A] border border-rose-500/30
-                flex items-center justify-center
-                shadow-[0_0_15px_rgba(251,113,133,0.15)]
-              "
+                bg-[#020B1A] border flex items-center justify-center
+                ${saturationStatus.styles.iconBoxBorder}
+                ${saturationStatus.styles.iconShadow}
+              `}
             >
-              <BarChart3 className="w-6 h-6 text-rose-400" />
+              <BarChart3 className={`w-6 h-6 ${saturationStatus.styles.iconColor}`} />
             </div>
 
             <div>
-              <p className="text-xs text-rose-200/70 mb-0.5">현재 포화도</p>
-              <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(251,113,133,0.3)]">
+              <p className={`text-xs mb-0.5 ${saturationStatus.styles.titleText}`}>
+                현재 포화도
+              </p>
+              <p
+                className={`
+                  text-2xl font-bold text-white tracking-tight
+                  ${saturationStatus.styles.valueShadow}
+                `}
+              >
                 {saturation}
-                <span className="text-sm font-normal text-rose-200/50 ml-1">%</span>
+                <span className={`text-sm font-normal ml-1 ${saturationStatus.styles.unitText}`}>
+                  %
+                </span>
               </p>
             </div>
           </div>
-          
-          <span className="text-xs font-medium text-rose-400 bg-rose-400/10 px-2 py-1 rounded border border-rose-400/20">
-            혼잡
+
+          <span
+            className={`
+              text-xs font-medium px-2 py-1 rounded border
+              ${saturationStatus.styles.badgeText}
+              ${saturationStatus.styles.badgeBg}
+              ${saturationStatus.styles.badgeBorder}
+            `}
+          >
+            {saturationStatus.label}
           </span>
         </div>
       )}
@@ -126,6 +220,359 @@ function SummaryCards({ totalSpaces, availablePrediction, saturation }) {
 }
 
 export default SummaryCards;
+
+// // src/pages/MainPage/Details/ParkingInfoPanel/SummaryCards.jsx
+// import React, { useMemo } from "react";
+// import { ParkingSquare, BarChart3, Car } from "lucide-react";
+
+// function SummaryCards({ totalSpaces, availablePrediction, saturation }) {
+  
+//   // 🔹 포화도에 따른 상태(색상, 라벨, 스타일) 결정 로직
+//   const saturationStatus = useMemo(() => {
+//     if (saturation == null) return null;
+
+//     // 🚨 80% 이상: 혼잡 (Red/Rose)
+//     if (saturation >= 80) {
+//       return {
+//         label: "혼잡",
+//         styles: {
+//           border: "border-rose-400/20",
+//           hoverBorder: "hover:border-rose-400/40",
+//           bgGradient: "from-rose-500/5",
+//           iconBoxBorder: "border-rose-500/30",
+//           iconShadow: "shadow-[0_0_15px_rgba(251,113,133,0.15)]",
+//           iconColor: "text-rose-400",
+//           titleText: "text-rose-200/70",
+//           valueShadow: "drop-shadow-[0_0_8px_rgba(251,113,133,0.3)]",
+//           unitText: "text-rose-200/50",
+//           badgeText: "text-rose-400",
+//           badgeBg: "bg-rose-400/10",
+//           badgeBorder: "border-rose-400/20",
+//         },
+//       };
+//     }
+//     // ⚠️ 50% ~ 79%: 보통 (Orange/Amber)
+//     else if (saturation >= 50) {
+//       return {
+//         label: "보통",
+//         styles: {
+//           border: "border-amber-400/20",
+//           hoverBorder: "hover:border-amber-400/40",
+//           bgGradient: "from-amber-500/5",
+//           iconBoxBorder: "border-amber-500/30",
+//           iconShadow: "shadow-[0_0_15px_rgba(251,191,36,0.15)]",
+//           iconColor: "text-amber-400",
+//           titleText: "text-amber-200/70",
+//           valueShadow: "drop-shadow-[0_0_8px_rgba(251,191,36,0.3)]",
+//           unitText: "text-amber-200/50",
+//           badgeText: "text-amber-400",
+//           badgeBg: "bg-amber-400/10",
+//           badgeBorder: "border-amber-400/20",
+//         },
+//       };
+//     }
+//     // ✅ 50% 미만: 여유 (Green/Emerald)
+//     else {
+//       return {
+//         label: "여유",
+//         styles: {
+//           border: "border-emerald-400/20",
+//           hoverBorder: "hover:border-emerald-400/40",
+//           bgGradient: "from-emerald-500/5",
+//           iconBoxBorder: "border-emerald-500/30",
+//           iconShadow: "shadow-[0_0_15px_rgba(52,211,153,0.15)]",
+//           iconColor: "text-emerald-400",
+//           titleText: "text-emerald-200/70",
+//           valueShadow: "drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]",
+//           unitText: "text-emerald-200/50",
+//           badgeText: "text-emerald-400",
+//           badgeBg: "bg-emerald-400/10",
+//           badgeBorder: "border-emerald-400/20",
+//         },
+//       };
+//     }
+//   }, [saturation]);
+
+//   return (
+//     <div className="space-y-4 font-stardust">
+//       {/* ===== 총 주차 대수 (Cyan - Fixed) ===== */}
+//       <div
+//         className="
+//           relative group
+//           rounded-2xl border border-cyan-400/20
+//           bg-[#0B1C3A]/60 backdrop-blur-xl
+//           hover:bg-[#0B1C3A]/80 hover:border-cyan-400/40
+//           transition-all duration-300
+//           p-5 flex items-center justify-between
+//           overflow-hidden
+//         "
+//       >
+//         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+//         <div className="relative flex items-center space-x-4">
+//           <div
+//             className="
+//               w-12 h-12 rounded-2xl
+//               bg-[#020B1A] border border-cyan-500/30
+//               flex items-center justify-center
+//               shadow-[0_0_15px_rgba(34,211,238,0.15)]
+//             "
+//           >
+//             <Car className="w-6 h-6 text-cyan-400" />
+//           </div>
+
+//           <div>
+//             <p className="text-xs text-cyan-200/70 mb-0.5">총 주차 대수</p>
+//             <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
+//               {totalSpaces.toLocaleString()}
+//               <span className="text-sm font-normal text-cyan-200/50 ml-1">대</span>
+//             </p>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* ===== 주차 가능 예측 (Emerald - Fixed) ===== */}
+//       <div
+//         className="
+//           relative group
+//           rounded-2xl border border-emerald-400/20
+//           bg-[#0B1C3A]/60 backdrop-blur-xl
+//           hover:bg-[#0B1C3A]/80 hover:border-emerald-400/40
+//           transition-all duration-300
+//           p-5 flex items-center justify-between
+//           overflow-hidden
+//         "
+//       >
+//         <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+//         <div className="relative flex items-center space-x-4">
+//           <div
+//             className="
+//               w-12 h-12 rounded-2xl
+//               bg-[#020B1A] border border-emerald-500/30
+//               flex items-center justify-center
+//               shadow-[0_0_15px_rgba(52,211,153,0.15)]
+//             "
+//           >
+//             <ParkingSquare className="w-6 h-6 text-emerald-400" />
+//           </div>
+
+//           <div>
+//             <p className="text-xs text-emerald-200/70 mb-0.5">주차 가능 예측</p>
+//             <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]">
+//               {availablePrediction.toLocaleString()}
+//               <span className="text-sm font-normal text-emerald-200/50 ml-1">대</span>
+//             </p>
+//           </div>
+//         </div>
+
+//         <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded border border-emerald-400/20">
+//           추정
+//         </span>
+//       </div>
+
+//       {/* ===== 포화도 (Dynamic Color & Label) ===== */}
+//       {saturation != null && saturationStatus && (
+//         <div
+//           className={`
+//             relative group
+//             rounded-2xl border
+//             bg-[#0B1C3A]/60 backdrop-blur-xl
+//             hover:bg-[#0B1C3A]/80
+//             transition-all duration-300
+//             p-5 flex items-center justify-between
+//             overflow-hidden
+//             ${saturationStatus.styles.border}
+//             ${saturationStatus.styles.hoverBorder}
+//           `}
+//         >
+//           {/* 배경 그라데이션 */}
+//           <div
+//             className={`
+//               absolute inset-0 bg-gradient-to-r to-transparent opacity-0 group-hover:opacity-100 transition-opacity
+//               ${saturationStatus.styles.bgGradient}
+//             `}
+//           />
+
+//           <div className="relative flex items-center space-x-4">
+//             {/* 아이콘 박스 */}
+//             <div
+//               className={`
+//                 w-12 h-12 rounded-2xl
+//                 bg-[#020B1A] border flex items-center justify-center
+//                 ${saturationStatus.styles.iconBoxBorder}
+//                 ${saturationStatus.styles.iconShadow}
+//               `}
+//             >
+//               <BarChart3 className={`w-6 h-6 ${saturationStatus.styles.iconColor}`} />
+//             </div>
+
+//             {/* 텍스트 정보 */}
+//             <div>
+//               <p className={`text-xs mb-0.5 ${saturationStatus.styles.titleText}`}>
+//                 현재 포화도
+//               </p>
+//               <p
+//                 className={`
+//                   text-2xl font-bold text-white tracking-tight
+//                   ${saturationStatus.styles.valueShadow}
+//                 `}
+//               >
+//                 {saturation}
+//                 <span className={`text-sm font-normal ml-1 ${saturationStatus.styles.unitText}`}>
+//                   %
+//                 </span>
+//               </p>
+//             </div>
+//           </div>
+
+//           {/* 라벨 뱃지 (여유 / 보통 / 혼잡) */}
+//           <span
+//             className={`
+//               text-xs font-medium px-2 py-1 rounded border
+//               ${saturationStatus.styles.badgeText}
+//               ${saturationStatus.styles.badgeBg}
+//               ${saturationStatus.styles.badgeBorder}
+//             `}
+//           >
+//             {saturationStatus.label}
+//           </span>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default SummaryCards;
+
+// import React from "react";
+// import { ParkingSquare, BarChart3, Car } from "lucide-react";
+
+// function SummaryCards({ totalSpaces, availablePrediction, saturation }) {
+//   return (
+//     <div className="space-y-4 font-stardust">
+//       {/* ===== 총 주차 대수 ===== */}
+//       <div
+//         className="
+//           relative group
+//           rounded-2xl border border-cyan-400/20
+//           bg-[#0B1C3A]/60 backdrop-blur-xl
+//           hover:bg-[#0B1C3A]/80 hover:border-cyan-400/40
+//           transition-all duration-300
+//           p-5 flex items-center justify-between
+//           overflow-hidden
+//         "
+//       >
+//         <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+//         <div className="relative flex items-center space-x-4">
+//           <div
+//             className="
+//               w-12 h-12 rounded-2xl
+//               bg-[#020B1A] border border-cyan-500/30
+//               flex items-center justify-center
+//               shadow-[0_0_15px_rgba(34,211,238,0.15)]
+//             "
+//           >
+//             <Car className="w-6 h-6 text-cyan-400" />
+//           </div>
+
+//           <div>
+//             <p className="text-xs text-cyan-200/70 mb-0.5">총 주차 대수</p>
+//             <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(34,211,238,0.3)]">
+//               {totalSpaces.toLocaleString()}
+//               <span className="text-sm font-normal text-cyan-200/50 ml-1">대</span>
+//             </p>
+//           </div>
+//         </div>
+//       </div>
+
+//       {/* ===== 주차 가능 예측 (Emerald Point) ===== */}
+//       <div
+//         className="
+//           relative group
+//           rounded-2xl border border-emerald-400/20
+//           bg-[#0B1C3A]/60 backdrop-blur-xl
+//           hover:bg-[#0B1C3A]/80 hover:border-emerald-400/40
+//           transition-all duration-300
+//           p-5 flex items-center justify-between
+//           overflow-hidden
+//         "
+//       >
+//         <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+//         <div className="relative flex items-center space-x-4">
+//           <div
+//             className="
+//               w-12 h-12 rounded-2xl
+//               bg-[#020B1A] border border-emerald-500/30
+//               flex items-center justify-center
+//               shadow-[0_0_15px_rgba(52,211,153,0.15)]
+//             "
+//           >
+//             <ParkingSquare className="w-6 h-6 text-emerald-400" />
+//           </div>
+
+//           <div>
+//             <p className="text-xs text-emerald-200/70 mb-0.5">주차 가능 예측</p>
+//             <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(52,211,153,0.3)]">
+//               {availablePrediction.toLocaleString()}
+//               <span className="text-sm font-normal text-emerald-200/50 ml-1">대</span>
+//             </p>
+//           </div>
+//         </div>
+
+//         <span className="text-xs font-medium text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded border border-emerald-400/20">
+//           추정
+//         </span>
+//       </div>
+
+//       {/* ===== 포화도 (Rose Point) ===== */}
+//       {saturation != null && (
+//         <div
+//           className="
+//             relative group
+//             rounded-2xl border border-rose-400/20
+//             bg-[#0B1C3A]/60 backdrop-blur-xl
+//             hover:bg-[#0B1C3A]/80 hover:border-rose-400/40
+//             transition-all duration-300
+//             p-5 flex items-center justify-between
+//             overflow-hidden
+//           "
+//         >
+//           <div className="absolute inset-0 bg-gradient-to-r from-rose-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+//           <div className="relative flex items-center space-x-4">
+//             <div
+//               className="
+//                 w-12 h-12 rounded-2xl
+//                 bg-[#020B1A] border border-rose-500/30
+//                 flex items-center justify-center
+//                 shadow-[0_0_15px_rgba(251,113,133,0.15)]
+//               "
+//             >
+//               <BarChart3 className="w-6 h-6 text-rose-400" />
+//             </div>
+
+//             <div>
+//               <p className="text-xs text-rose-200/70 mb-0.5">현재 포화도</p>
+//               <p className="text-2xl font-bold text-white tracking-tight drop-shadow-[0_0_8px_rgba(251,113,133,0.3)]">
+//                 {saturation}
+//                 <span className="text-sm font-normal text-rose-200/50 ml-1">%</span>
+//               </p>
+//             </div>
+//           </div>
+          
+//           <span className="text-xs font-medium text-rose-400 bg-rose-400/10 px-2 py-1 rounded border border-rose-400/20">
+//             혼잡
+//           </span>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default SummaryCards;
 
 // // src/pages/MainPage/Details/ParkingInfoPanel/SummaryCards.jsx
 // import React from "react";

@@ -13,7 +13,7 @@ function InfoTabs({ activeTab, onTabChange, hours = [8, 9, 13] }) {
       "
     >
       <h2 className="pl-3 text-sm font-bold text-cyan-100/90 tracking-wider">
-        시간대 선택
+        시간대
       </h2>
       <div className="flex bg-[#020B1A]/60 rounded-xl p-1 gap-1">
         {tabs.map((tab) => {
