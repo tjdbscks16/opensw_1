@@ -169,23 +169,31 @@ export default function HomePage() {
         />
 
         {/* 상단 설정 버튼 */}
-        <header className="absolute top-3 right-3 flex gap-2 z-30">
+        <header className="absolute top-4 right-4 flex gap-2 z-30">
           <button
             onClick={handleSettingClick}
             className="
               w-11 h-11 rounded-full
               flex items-center justify-center
-              bg-white/10 backdrop-blur-md
-              border border-white/20
-              text-white text-xl
-              shadow-[0_8px_24px_rgba(0,0,0,0.6)]
-              hover:bg-white/20 hover:scale-110
-              transition
+
+              bg-[#06142F]/80 backdrop-blur-md
+              border border-cyan-400/40
+
+              text-cyan-200
+              shadow-[0_0_18px_rgba(34,211,238,0.45),_0_8px_24px_rgba(0,0,0,0.6)]
+
+              hover:border-cyan-300
+              hover:text-cyan-100
+              hover:shadow-[0_0_26px_rgba(34,211,238,0.75)]
+              hover:scale-110
+
+              transition-all duration-300
             "
           >
-            <Settings />
+            <Settings className="w-5 h-5" />
           </button>
         </header>
+
 
 
         {/* 확장 애니메이션 오버레이 */}
@@ -216,7 +224,7 @@ export default function HomePage() {
           label="일송 주차장"
           onClick={() => handleMarkerClick("Ilsong")}
         />
-        <Marker type="red" top="50%" left="25%" label="도헌 주차장" />
+        <Marker type="red" top="53%" left="25%" label="도헌 주차장" />
         <Marker type="red" top="55%" left="90%" label="CLC 주차장" />
 
         {/* 🔹 왼쪽 텍스트 영역 – 자동차 랜딩 페이지처럼 분리감 주기 */}
@@ -243,8 +251,9 @@ export default function HomePage() {
 
             {/* 서브텍스트 */}
             <p className="text-base md:text-lg text-gray-200/80 max-w-md leading-relaxed">
-              주차 혼잡도를 한눈에 확인하고, 공대·일송·도헌·CLC
-              주차장의 예상 혼잡 수준을 기반으로 최적의 주차 위치를 안내받으세요.
+              주차 혼잡도를 한눈에 확인하고, 한림대학교의 주차장의 
+              <br />
+              예상 혼잡 수준을 기반으로 최적의 주차 위치를 안내 받으세요.
             </p>
 
             <div className="flex flex-wrap gap-3 pt-2">
