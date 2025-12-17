@@ -76,10 +76,10 @@ export default function TutorialStep1() {
               <span className="text-cyan-400 font-bold">02</span>
               <span>스크롤로 지도 확대 / 축소</span>
             </li>
-            <li className="flex gap-3">
+            {/* <li className="flex gap-3">
               <span className="text-cyan-400 font-bold">03</span>
               <span>구역 클릭 시 상세 정보 확인</span>
-            </li>
+            </li> */}
           </ul>
         </div>
 
@@ -93,7 +93,7 @@ export default function TutorialStep1() {
           "
         >
           <p className="text-sm text-emerald-200 font-stardust">
-            💡 팁 : 우클릭하면 기본 시점으로 복귀합니다.
+            💡 팁 : 우측 상단 토글 버튼을 통해 장소를 쉽게 이동할 수 있습니다.
           </p>
         </div>
       </div>
