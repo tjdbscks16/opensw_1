@@ -330,3 +330,4 @@ with row2_2:
 # Footer
 st.markdown("---")
 st.markdown("© 2025 OpenSW_1 팀 - 한림대학교 주차 데이터 분석 대시보드")
+st.markdown("AI features powered by Meta Llama 3.1 (via Ollama).\nLlama 3.1 is licensed under the Llama 3.1 Community License.\nBuilt with Llama.\n")
