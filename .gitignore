@@ -22,3 +22,11 @@ backend/data/*.xlsx
 *.pth
 *.h5
 *.ckpt
+
+node_modules
+dist
+dist-ssr
+.vscode/
+.idea/
+.DS_Store
+*.log
