@@ -1,0 +1,9 @@
+Third-Party Licenses and Notices
+
+This project uses Meta’s Llama 3.1 large language model via Ollama.
+
+Llama 3.1 is licensed under the Llama 3.1 Community License, which is not covered by this project's MIT License.
+The use, distribution, and modification of the Llama 3.1 model and any derived models
+are subject to the terms and conditions of Meta’s Llama 3.1 Community License.
+
+Built with Llama.
